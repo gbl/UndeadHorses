@@ -19,6 +19,12 @@ import org.bukkit.event.Listener;
 
 public class UndeadHorsesListener implements Listener
 {
+    private final UndeadHorses plugin;
+    
+    UndeadHorsesListener(UndeadHorses p) {
+        plugin=p;
+    }
+    
     @EventHandler
     public void onEntityDamageByEntityEvent(final EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Horse) {
@@ -47,18 +53,20 @@ public class UndeadHorsesListener implements Listener
         if (e instanceof Horse) {
             final Horse h = (Horse)e;
             if (h.getVariant() == Horse.Variant.SKELETON_HORSE & !p.hasPermission("undeadhorses.skeletonride")) {
-                p.sendMessage(ChatColor.RED + "This horse cannot be ridden!");
+                p.sendMessage(plugin.getMessageLoader().getMessage("feedback.ui.cannotride"));
                 event.setCancelled(true);
             }
             else if (h.getVariant() == Horse.Variant.UNDEAD_HORSE & !p.hasPermission("undeadhorses.zombieride")) {
-                p.sendMessage(ChatColor.RED + "This horse cannot be ridden!");
+                p.sendMessage(plugin.getMessageLoader().getMessage("feedback.ui.cannotride"));
                 event.setCancelled(true);
             }
-            Material material=p.getItemInHand().getType();
+            Material material=p.getInventory().getItemInMainHand().getType();
+            if (material==Material.AIR)
+                material=p.getInventory().getItemInOffHand().getType();
 //            p.sendMessage("item in cursor is "+p.getItemInHand().getType());
             if (material == Material.BONE && p.hasPermission("undeadhorses.skeleton")) {
                 if (UndeadHorses.MustBeNight && UndeadHorses.isDay(p.getWorld())) {
-                    p.sendMessage(ChatColor.RED + "It must be night time to convert a horse!");
+                    p.sendMessage(plugin.getMessageLoader().getMessage("feedback.ui.onlyatnight"));
                     return;
                 }
                 if (UndeadHorses.chargePlayerXP(p)) {
@@ -69,7 +77,7 @@ public class UndeadHorsesListener implements Listener
             else if (material == Material.ROTTEN_FLESH && p.hasPermission("undeadhorses.zombie")) {
                 event.setCancelled(true);
                 if (UndeadHorses.MustBeNight && UndeadHorses.isDay(p.getWorld())) {
-                    p.sendMessage(ChatColor.RED + "It must be night time to convert a horse!");
+                    p.sendMessage(plugin.getMessageLoader().getMessage("feedback.ui.onlyatnight"));
                     return;
                 }
                 if (UndeadHorses.chargePlayerXP(p)) {
@@ -87,7 +95,7 @@ public class UndeadHorsesListener implements Listener
                     event.setCancelled(true);
                 }
                 else {
-                    p.sendMessage(ChatColor.RED + "You cannot cure that horse!");
+                    p.sendMessage(plugin.getMessageLoader().getMessage("feedback.ui.nocureperms"));
                 }
             }
         }

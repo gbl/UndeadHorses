@@ -11,6 +11,7 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Entity;
 import org.bukkit.World;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Horse.Variant;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -23,20 +24,24 @@ public class UndeadHorsesEvent extends BukkitRunnable
         this.plugin = plugin;
     }
     
+    @Override
     public void run() {
         for (final World world : Bukkit.getWorlds()) {
             for (final Entity e : world.getEntities()) {
                 if (e instanceof Horse) {
                     final Horse h = (Horse)e;
-                    if (!(h.getVariant() == Horse.Variant.SKELETON_HORSE || h.getVariant() == Horse.Variant.UNDEAD_HORSE) || UndeadHorses.isDay(world)) {
+                    final Variant v=h.getVariant();
+                    if (UndeadHorses.isDay(world)
+                        || ( v != Horse.Variant.SKELETON_HORSE 
+                          && v != Horse.Variant.UNDEAD_HORSE)
+                    ) {
                         continue;
                     }
                     world.playSound(h.getLocation(), Sound.BLOCK_FIRE_AMBIENT, 20.0f, 4.0f);
                     world.playEffect(h.getLocation(), Effect.MOBSPAWNER_FLAMES, 100);
-                    if (h.getVariant() == Horse.Variant.SKELETON_HORSE) {
+                    if (v == Horse.Variant.SKELETON_HORSE) {
                         h.addPotionEffects((Collection<PotionEffect>)UndeadHorses.SkeletonEffects);
-                    }
-                    else  if (h.getVariant() == Horse.Variant.UNDEAD_HORSE) {
+                    } else if (v == Horse.Variant.UNDEAD_HORSE) {
                         h.addPotionEffects((Collection<PotionEffect>)UndeadHorses.ZombieEffects);
                     }
                 }

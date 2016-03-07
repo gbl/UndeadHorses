@@ -1,0 +1,20 @@
+## YAML Template.
+---
+
+feedback:
+  cmd:
+    configreloaded: "§2Config reloaded!"
+    prefix:         "§2Prefix for all UndeadHorses commands!"
+  
+  ui:
+    convertedhorse: "§2You turned that horse over to the undead..."
+    removearmor:    "§4You must remove that horse's armour first!"
+    hasowner:       "§4You are not the owner of this horse! The owner is: {0}"
+    iswild:         "§4You are not the owner of this horse! It is wild!"
+    curedhorse:     "§2You cured that horse!"
+    notowner:       "§4You are not the owner of this horse!"
+    xpcharged:      "§2You have been charged {1} levels and are now Level {0}!"
+    insufficientxp: "§4You do not have enough levels to convert this horse, you need {0}!"
+    cannotride:     "§4This horse cannot be ridden!"
+    onlyatnight:    "§4It must be night time to convert a horse!"
+    nocureperms:    "§4You feel too insignificant to cure that horse!"
