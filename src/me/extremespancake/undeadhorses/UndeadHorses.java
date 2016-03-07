@@ -5,7 +5,6 @@
 package me.extremespancake.undeadhorses;
 
 import org.bukkit.World;
-import java.util.Iterator;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.GameMode;
 import org.bukkit.Effect;
@@ -98,7 +97,7 @@ public class UndeadHorses extends JavaPlugin implements Listener
                 player.sendMessage(ChatColor.GREEN + "You turned that horse over to the undead...");
                 horse.setTamed(true);
                 horse.setOwner((AnimalTamer)player);
-                player.getWorld().playSound(horse.getLocation(), Sound.ZOMBIE_INFECT, 10.0f, 1.0f);
+                player.getWorld().playSound(horse.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 10.0f, 1.0f);
                 horse.getWorld().playEffect(horse.getLocation(), Effect.MOBSPAWNER_FLAMES, 2004);
             }
             else {
@@ -118,7 +117,7 @@ public class UndeadHorses extends JavaPlugin implements Listener
             if (!UndeadHorses.MustBeOwnerToCure | player.hasPermission("undeadhorses.cureunownedhorsesbypass") | (horse.isTamed() && (horse.getOwner().getName() == player.getName() | horse.getOwner().getName() == player.getDisplayName()))) {
                 horse.setVariant(Horse.Variant.HORSE);
                 player.sendMessage(ChatColor.GREEN + "You cured that horse!");
-                player.playSound(horse.getLocation(), Sound.ZOMBIE_REMEDY, 10.0f, 1.0f);
+                player.playSound(horse.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 10.0f, 1.0f);
             }
             else {
                 player.sendMessage(ChatColor.RED + "You are not the owner of this horse!");

@@ -30,7 +30,7 @@ public class UndeadHorsesListener implements Listener
             else if (((horse.getVariant() == Horse.Variant.SKELETON_HORSE && UndeadHorses.SkelDealBack) | (horse.getVariant() == Horse.Variant.UNDEAD_HORSE && UndeadHorses.ZombDealBack)) && event.getCause().equals((Object)EntityDamageEvent.DamageCause.PROJECTILE)) {
                 final Projectile proj = (Projectile)event.getDamager();
                 if (proj.getShooter() instanceof LivingEntity) {
-                    final LivingEntity shooter = proj.getShooter();
+                    final LivingEntity shooter = (LivingEntity) proj.getShooter();
                     shooter.damage((double)Math.round(event.getDamage() / 3.0), (Entity)shooter);
                 }
             }
@@ -41,6 +41,9 @@ public class UndeadHorsesListener implements Listener
     public void onPlayerInteractEntity(final PlayerInteractEntityEvent event) {
         final Player p = event.getPlayer();
         final Entity e = event.getRightClicked();
+        p.sendMessage("item in cursor is "+p.getItemInHand().getType());
+        if (e!=null) 
+            p.sendMessage("You clicked a "+e.getClass().getCanonicalName());
         if (e instanceof Horse) {
             final Horse h = (Horse)e;
             if (h.getVariant() == Horse.Variant.SKELETON_HORSE & !p.hasPermission("undeadhorses.skeletonride")) {
@@ -51,7 +54,9 @@ public class UndeadHorsesListener implements Listener
                 p.sendMessage(ChatColor.RED + "This horse cannot be ridden!");
                 event.setCancelled(true);
             }
-            if (p.getItemInHand().getType() == Material.BONE && p.hasPermission("undeadhorses.skeleton")) {
+            Material material=p.getItemInHand().getType();
+            p.sendMessage("item in cursor is "+p.getItemInHand().getType());
+            if (material == Material.BONE && p.hasPermission("undeadhorses.skeleton")) {
                 if (UndeadHorses.MustBeNight && UndeadHorses.isDay(p.getWorld())) {
                     p.sendMessage(ChatColor.RED + "It must be night time to convert a horse!");
                     return;
@@ -61,7 +66,7 @@ public class UndeadHorsesListener implements Listener
                     event.setCancelled(true);
                 }
             }
-            else if (p.getItemInHand().getType() == Material.ROTTEN_FLESH && p.hasPermission("undeadhorses.zombie")) {
+            else if (material == Material.ROTTEN_FLESH && p.hasPermission("undeadhorses.zombie")) {
                 event.setCancelled(true);
                 if (UndeadHorses.MustBeNight && UndeadHorses.isDay(p.getWorld())) {
                     p.sendMessage(ChatColor.RED + "It must be night time to convert a horse!");
@@ -72,7 +77,7 @@ public class UndeadHorsesListener implements Listener
                     event.setCancelled(true);
                 }
             }
-            else if (p.getItemInHand().getType() == Material.GOLD_NUGGET | p.getItemInHand().getType() == Material.GOLD_INGOT) {
+            else if (material == Material.GOLD_NUGGET || material == Material.GOLD_INGOT) {
                 if (h.getVariant() == Horse.Variant.SKELETON_HORSE && p.hasPermission("undeadhorses.skeletoncure")) {
                     UndeadHorses.cureHorse(h, p);
                     event.setCancelled(true);

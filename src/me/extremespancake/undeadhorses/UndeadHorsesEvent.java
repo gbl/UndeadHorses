@@ -4,7 +4,6 @@
 
 package me.extremespancake.undeadhorses;
 
-import java.util.Iterator;
 import java.util.Collection;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
@@ -13,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.World;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class UndeadHorsesEvent extends BukkitRunnable
@@ -28,19 +28,16 @@ public class UndeadHorsesEvent extends BukkitRunnable
             for (final Entity e : world.getEntities()) {
                 if (e instanceof Horse) {
                     final Horse h = (Horse)e;
-                    if (!(h.getVariant() == Horse.Variant.SKELETON_HORSE | h.getVariant() == Horse.Variant.UNDEAD_HORSE) || UndeadHorses.isDay(world)) {
+                    if (!(h.getVariant() == Horse.Variant.SKELETON_HORSE || h.getVariant() == Horse.Variant.UNDEAD_HORSE) || UndeadHorses.isDay(world)) {
                         continue;
                     }
-                    world.playSound(h.getLocation(), Sound.FIRE, 20.0f, 4.0f);
+                    world.playSound(h.getLocation(), Sound.BLOCK_FIRE_AMBIENT, 20.0f, 4.0f);
                     world.playEffect(h.getLocation(), Effect.MOBSPAWNER_FLAMES, 100);
                     if (h.getVariant() == Horse.Variant.SKELETON_HORSE) {
-                        h.addPotionEffects((Collection)UndeadHorses.SkeletonEffects);
+                        h.addPotionEffects((Collection<PotionEffect>)UndeadHorses.SkeletonEffects);
                     }
-                    else {
-                        if (h.getVariant() != Horse.Variant.UNDEAD_HORSE) {
-                            continue;
-                        }
-                        h.addPotionEffects((Collection)UndeadHorses.ZombieEffects);
+                    else  if (h.getVariant() == Horse.Variant.UNDEAD_HORSE) {
+                        h.addPotionEffects((Collection<PotionEffect>)UndeadHorses.ZombieEffects);
                     }
                 }
             }
