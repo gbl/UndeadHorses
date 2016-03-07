@@ -1,0 +1,23 @@
+#Default configuration file for Undead Horses. Thanks for Downloading! -extremespancake
+
+#Should the person converting the horse into an undead one be the owner?
+MustBeOwnerToConvert: false
+
+#Should the person curing the horse into an undead one be the owner?
+MustBeOwnerToCure: false
+
+MustBeNight: false
+
+XPCostInLevels: 0
+
+SkeletonHorsesReturnDamage: false
+
+ZombieHorsesReturnDamage: false
+
+SkeletonHorseEffects: 
+                     - SPEED, 1
+                     
+ZombieHorseEffects:
+                     - SPEED, 1
+                   
+

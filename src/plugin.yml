@@ -1,0 +1,39 @@
+name: UndeadHorses
+main: me.extremespancake.undeadhorses.UndeadHorses
+version: 5.0
+description: Turn horses into skeleton and zombie horses by clicking them with bones and rotten flesh
+commands:
+    undeadhorses: 
+        description: All commands for undead horses
+permissions:
+    undeadhorses.*: 
+        description: Grants all permssions for UndeadHorses
+        children:
+            undeadhorses.zombie: true
+            undeadhorses.skeleton: true
+            undeadhorses.skeletionride: true
+            undeadhorses.zombieride: true
+            undeadhorses.skeletoncure: true
+            undeadhorses.zombiecure: true
+            undeadhorses.convertunownedhorsesbypass: true
+            undeadhorses.cureunownedhorsesbypass: true
+            undeadhorses.reload: true
+        default: op
+    undeadhorses.zombie:
+        description: Allows you to turn horses into zombie horses
+    undeadhorses.skeleton:
+        description: Allows you to turn horses into skeleton horses
+    undeadhorses.zombieride:
+        description: Allows you to ride zombie horses
+    undeadhorses.skeletonride:
+        description: Allows you to ride skeleton horses
+    undeadhorses.zombiecure:
+        description: Allows you to cure zombie horses
+    undeadhorses.skeletoncure:
+        description: Allows you to cure skeleton horses
+    undeadhorses.convertunownedhorsesbypass:
+        description: Allows you to bypass the MustBeOwnerToConvert setting and allows you to convert horses you don't own
+    undeadhorses.cureunownedhorsesbypass:
+        description: Allows you to bypass the MustBeOwnerToCure setting and allows you to cure horses you don't own
+    undeadhorses.reload:
+        description: Allows you to reload the config
