@@ -5,8 +5,6 @@
  */
 package de.guntram.bukkit.library;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 /**
  *
  * @author gbl
