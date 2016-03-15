@@ -1,6 +1,6 @@
 name: UndeadHorses
 main: me.extremespancake.undeadhorses.UndeadHorses
-version: 5.0
+version: 5.2
 description: Turn horses into skeleton and zombie horses by clicking them with bones and rotten flesh
 commands:
     undeadhorses: 

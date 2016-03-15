@@ -86,6 +86,8 @@ public class UndeadHorses extends JavaPlugin implements Listener
                 this.loadConfig();
                 messageLoader.reloadMessages();
                 sender.sendMessage(messageLoader.getMessage("feedback.cmd.configreloaded"));
+            } else {
+                sender.sendMessage(messageLoader.getMessage("feedback.cmd.badcommand"));
             }
         }
         else {

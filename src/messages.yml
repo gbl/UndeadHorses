@@ -5,6 +5,7 @@ feedback:
   cmd:
     configreloaded: "§2Config reloaded!"
     prefix:         "§2Prefix for all UndeadHorses commands!"
+    badcommand:     "§4The only supported command is /undeadhorses reload, at the moment."
   
   ui:
     convertedhorse: "§2You turned that horse over to the undead..."
