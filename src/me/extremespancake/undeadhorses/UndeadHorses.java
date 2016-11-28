@@ -25,6 +25,12 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffect;
 import java.util.List;
 import java.util.logging.Level;
+import org.bukkit.Location;
+import org.bukkit.entity.AbstractHorse;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.SkeletonHorse;
+import org.bukkit.entity.ZombieHorse;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -96,16 +102,31 @@ public class UndeadHorses extends JavaPlugin implements Listener
         return true;
     }
     
-    public static void convertHorse(final Horse.Variant variant, final Horse horse, final Player player) {
+    public static void convertHorse(final Class variant, final Horse horse, final Player player) {
         if (!UndeadHorses.MustBeOwnerToConvert
         || player.hasPermission("undeadhorses.convertunownedhorsesbypass") 
         || (horse.isTamed() && (horse.getOwner().getName().equals(player.getName()) 
         || horse.getOwner().getName().equals(player.getDisplayName())))) {
             if (horse.getInventory().getArmor() == null) {
-                horse.setVariant(variant);
+                AbstractHorse newHorse;
+                Location loc=horse.getLocation();
+                int domestication=horse.getDomestication();
+                double jumpStrength=horse.getJumpStrength();
+                
+                horse.damage(1000000);
+                if (variant == SkeletonHorse.class) 
+                    newHorse=(AbstractHorse) loc.getWorld().spawnEntity(loc, EntityType.SKELETON_HORSE);
+                else if (variant == ZombieHorse.class) {
+                    newHorse=(AbstractHorse) loc.getWorld().spawnEntity(loc, EntityType.ZOMBIE_HORSE);
+                } else {
+                    newHorse=(AbstractHorse) loc.getWorld().spawnEntity(loc, EntityType.LLAMA);
+                }
+                        
                 player.sendMessage(messageLoader.getMessage("feedback.ui.convertedhorse"));
-                horse.setTamed(true);
-                horse.setOwner((AnimalTamer)player);
+                newHorse.setDomestication(domestication);
+                newHorse.setJumpStrength(jumpStrength);
+                newHorse.setTamed(true);
+                newHorse.setOwner((AnimalTamer)player);
                 player.getWorld().playSound(horse.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 10.0f, 1.0f);
                 horse.getWorld().playEffect(horse.getLocation(), Effect.MOBSPAWNER_FLAMES, 2004);
             }
@@ -121,8 +142,8 @@ public class UndeadHorses extends JavaPlugin implements Listener
         }
     }
     
-    public static void cureHorse(final Horse horse, final Player player) {
-        if (horse.getVariant() == Horse.Variant.UNDEAD_HORSE | horse.getVariant() == Horse.Variant.SKELETON_HORSE) {
+    public static void cureHorse(final AbstractHorse horse, final Player player) {
+        if (horse instanceof ZombieHorse || horse instanceof SkeletonHorse) {
             if (!UndeadHorses.MustBeOwnerToCure || player.hasPermission("undeadhorses.cureunownedhorsesbypass")
             || (horse.isTamed()
                 && (  horse.getOwner().getName().equals(player.getName())
@@ -130,7 +151,21 @@ public class UndeadHorses extends JavaPlugin implements Listener
                    )
                )
             ) {
-                horse.setVariant(Horse.Variant.HORSE);
+                Horse newHorse;
+                Location loc=horse.getLocation();
+                int domestication=horse.getDomestication();
+                double jumpStrength=horse.getJumpStrength();
+                AnimalTamer tamer=horse.getOwner();
+                boolean tamed=horse.isTamed();
+                
+                horse.damage(1000000);
+                newHorse=(Horse) loc.getWorld().spawnEntity(loc, EntityType.HORSE);
+                newHorse.setDomestication(domestication);
+                newHorse.setJumpStrength(jumpStrength);
+                if (tamed) {
+                    newHorse.setTamed(tamed);
+                    newHorse.setOwner(tamer);
+                }
                 player.sendMessage(messageLoader.getMessage("feedback.ui.curedhorse"));
                 player.playSound(horse.getLocation(), Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 10.0f, 1.0f);
             }

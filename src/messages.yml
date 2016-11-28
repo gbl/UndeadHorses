@@ -19,3 +19,4 @@ feedback:
     cannotride:     "§4This horse cannot be ridden!"
     onlyatnight:    "§4It must be night time to convert a horse!"
     nocureperms:    "§4You feel too insignificant to cure that horse!"
+    nocureneeded:   "§4This horse does not need to be cured!"

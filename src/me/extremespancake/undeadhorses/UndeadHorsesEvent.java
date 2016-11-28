@@ -11,7 +11,8 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Entity;
 import org.bukkit.World;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Horse.Variant;
+import org.bukkit.entity.SkeletonHorse;
+import org.bukkit.entity.ZombieHorse;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,21 +29,18 @@ public class UndeadHorsesEvent extends BukkitRunnable
     public void run() {
         for (final World world : Bukkit.getWorlds()) {
             for (final Entity e : world.getEntities()) {
-                if (e instanceof Horse) {
-                    final Horse h = (Horse)e;
-                    final Variant v=h.getVariant();
+                if (e instanceof Horse || e instanceof SkeletonHorse || e instanceof ZombieHorse) {
                     if (UndeadHorses.isDay(world)
-                        || ( v != Horse.Variant.SKELETON_HORSE 
-                          && v != Horse.Variant.UNDEAD_HORSE)
+                        || ( e instanceof Horse)
                     ) {
                         continue;
                     }
-                    world.playSound(h.getLocation(), Sound.BLOCK_FIRE_AMBIENT, 20.0f, 4.0f);
-                    world.playEffect(h.getLocation(), Effect.MOBSPAWNER_FLAMES, 100);
-                    if (v == Horse.Variant.SKELETON_HORSE) {
-                        h.addPotionEffects((Collection<PotionEffect>)UndeadHorses.SkeletonEffects);
-                    } else if (v == Horse.Variant.UNDEAD_HORSE) {
-                        h.addPotionEffects((Collection<PotionEffect>)UndeadHorses.ZombieEffects);
+                    world.playSound(e.getLocation(), Sound.BLOCK_FIRE_AMBIENT, 20.0f, 4.0f);
+                    world.playEffect(e.getLocation(), Effect.MOBSPAWNER_FLAMES, 100);
+                    if (e instanceof SkeletonHorse) {
+                        ((SkeletonHorse) e).addPotionEffects((Collection<PotionEffect>)UndeadHorses.SkeletonEffects);
+                    } else if (e instanceof ZombieHorse) {
+                        ((ZombieHorse) e).addPotionEffects((Collection<PotionEffect>)UndeadHorses.ZombieEffects);
                     }
                 }
             }
