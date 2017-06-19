@@ -64,8 +64,8 @@ public class UndeadHorsesListener implements Listener
             final Location playerLocation = p.getLocation();
             float pitch = playerLocation.getPitch();
             float yaw = playerLocation.getYaw();
-            System.out.println("at event: player pitch="+pitch+", yaw="+yaw);
-            System.out.println("target is a "+e.getClass().getSimpleName()+ " with "+((LivingEntity)e).getHealth()+" hp");
+            // System.out.println("at event: player pitch="+pitch+", yaw="+yaw);
+            // System.out.println("target is a "+e.getClass().getSimpleName()+ " with "+((LivingEntity)e).getHealth()+" hp");
             if (e instanceof SkeletonHorse & !p.hasPermission("undeadhorses.skeletonride")) {
                 p.sendMessage(plugin.getMessageLoader().getMessage("feedback.ui.cannotride"));
                 event.setCancelled(true);
@@ -117,7 +117,7 @@ public class UndeadHorsesListener implements Listener
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
                     @Override
                     public void run() {
-                        System.out.println("repairing pitch and yaw to "+playerLocation.getYaw()+"/"+playerLocation.getPitch());
+                        // System.out.println("repairing pitch and yaw to "+playerLocation.getYaw()+"/"+playerLocation.getPitch());
                         // We need cause UNKNOWN, not PLUGIN, to prevent Essentials messing up our /back position
                         p.teleport(playerLocation, PlayerTeleportEvent.TeleportCause.UNKNOWN);
                     }
@@ -129,7 +129,7 @@ public class UndeadHorsesListener implements Listener
     @EventHandler
     public void onEntityDeath(final EntityDeathEvent e) {
         if (e.getEntity() == UndeadHorses.getHorseToReplace()) {
-            System.out.println("preventing drops when entity dies, previous number of drops is "+e.getDrops().size());
+            // System.out.println("preventing drops when entity dies, previous number of drops is "+e.getDrops().size());
             List<ItemStack> drops = e.getDrops();
             drops.clear();
         }
