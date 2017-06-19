@@ -27,12 +27,12 @@ import java.util.List;
 import java.util.logging.Level;
 import org.bukkit.Location;
 import org.bukkit.entity.AbstractHorse;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.entity.ZombieHorse;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.entity.LivingEntity;
 
 public class UndeadHorses extends JavaPlugin implements Listener
 {
@@ -112,8 +112,13 @@ public class UndeadHorses extends JavaPlugin implements Listener
                 Location loc=horse.getLocation();
                 int domestication=horse.getDomestication();
                 double jumpStrength=horse.getJumpStrength();
+                AnimalTamer tamer=horse.getOwner();
+                int age=horse.getAge();
+                boolean tamed=horse.isTamed();
                 
-                horse.damage(1000000);
+                horseToReplace=horse;
+                horse.damage(Float.MAX_VALUE);
+                horseToReplace=null;
                 if (variant == SkeletonHorse.class) 
                     newHorse=(AbstractHorse) loc.getWorld().spawnEntity(loc, EntityType.SKELETON_HORSE);
                 else if (variant == ZombieHorse.class) {
@@ -122,11 +127,14 @@ public class UndeadHorses extends JavaPlugin implements Listener
                     newHorse=(AbstractHorse) loc.getWorld().spawnEntity(loc, EntityType.LLAMA);
                 }
                         
-                player.sendMessage(messageLoader.getMessage("feedback.ui.convertedhorse"));
                 newHorse.setDomestication(domestication);
                 newHorse.setJumpStrength(jumpStrength);
-                newHorse.setTamed(true);
-                newHorse.setOwner((AnimalTamer)player);
+                newHorse.setAge(age);
+                if (tamed) {
+                    newHorse.setTamed(tamed);
+                    newHorse.setOwner(tamer);
+                }
+                player.sendMessage(messageLoader.getMessage("feedback.ui.convertedhorse"));
                 player.getWorld().playSound(horse.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 10.0f, 1.0f);
                 horse.getWorld().playEffect(horse.getLocation(), Effect.MOBSPAWNER_FLAMES, 2004);
             }
@@ -156,12 +164,16 @@ public class UndeadHorses extends JavaPlugin implements Listener
                 int domestication=horse.getDomestication();
                 double jumpStrength=horse.getJumpStrength();
                 AnimalTamer tamer=horse.getOwner();
+                int age=horse.getAge();
                 boolean tamed=horse.isTamed();
                 
-                horse.damage(1000000);
+                horseToReplace=horse;
+                horse.damage(Float.MAX_VALUE);
+                horseToReplace=null;
                 newHorse=(Horse) loc.getWorld().spawnEntity(loc, EntityType.HORSE);
                 newHorse.setDomestication(domestication);
                 newHorse.setJumpStrength(jumpStrength);
+                newHorse.setAge(age);
                 if (tamed) {
                     newHorse.setTamed(tamed);
                     newHorse.setOwner(tamer);
@@ -173,6 +185,11 @@ public class UndeadHorses extends JavaPlugin implements Listener
                 player.sendMessage(messageLoader.getMessage("feedback.ui.notowner"));
             }
         }
+    }
+    
+    private static AbstractHorse horseToReplace;
+    public static LivingEntity getHorseToReplace() {
+        return horseToReplace;
     }
     
     public static boolean chargePlayerXP(final Player player) {
@@ -188,7 +205,7 @@ public class UndeadHorses extends JavaPlugin implements Listener
             player.sendMessage(messageLoader.getMessage("feedback.ui.xpcharged", level, UndeadHorses.XPCost));
             return true;
         }
-        player.sendMessage(messageLoader.getMessage("feedback.ui.xpcharged", UndeadHorses.XPCost));
+        player.sendMessage(messageLoader.getMessage("feedback.ui.insufficientxp", UndeadHorses.XPCost));
         return false;
     }
     
